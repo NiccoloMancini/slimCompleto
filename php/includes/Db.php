@@ -14,7 +14,7 @@
         }
 
         public function select($table, $where = 1){
-            if ($result = $this->query("SELECT * FROM alunni WHERE $where")) {
+            if ($result = $this->query("SELECT * FROM $table WHERE $where")) {
                 return $result->fetch_all(MYSQLI_ASSOC);
             }
             return [];
