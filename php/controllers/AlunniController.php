@@ -4,6 +4,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class AlunniController{
   public function index(Request $request, Response $response, $args){
+    sleep(3);
     $result = Db::getInstance()->select("alunni");
     $response->getBody()->write(json_encode($result));
     return $response->withHeader("Content-type", "application/json")->withStatus(200);
