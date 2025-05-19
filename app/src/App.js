@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import AlunnoRow from './AlunnoRow';
 import {useState} from "react";
 
 function App() {
@@ -10,42 +11,44 @@ function App() {
   const [nome, setNome]=useState("");
   const [cognome, setCognome]=useState("");
 
-  function carica(){
+  async function carica(){
     setLoading(true);
-    fetch('http://localhost:8080/alunni')
-    .then(response => response.json())
-    .then(data => {
-      setAlunni(data)
-      setLoading(false)});
+    const response = await fetch('http://localhost:8080/alunni');
+    const data = await response.json();
+    setAlunni(data);
+    setLoading(false);
   }
 
-  function salvaAlunno(){
+  async function salvaAlunno(){
     setInserimento(false);
-    fetch('http://localhost:8080/alunni', {
+    const response = await fetch('http://localhost:8080/alunni', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({nome: nome, cognome: cognome})
     })
-    .then(response => response.json())
-    .then(data => carica());
+    const data = await response.json(); 
+    carica();
   }
 
-  function showInserimento(){
+  function showInserimento(){                             
     setInserimento(!inserimento);
+  }
+
+  async function eliminaAlunno(id) {
+    const response = await fetch("http://localhost:8080/alunni/" + id, {
+      method: "DELETE"
+    })
+    carica();
   }
 
   return(
     <>
-      <table border="1">
+      <table>
         {
         alunni.map(alunno =>
-            <tr>
-              <td>{alunno.id}</td>
-              <td>{alunno.nome}</td>
-              <td>{alunno.cognome}</td>
-            </tr>
+            <AlunnoRow alunno={alunno} elimina={(id) => eliminaAlunno(id)} carica={() => carica()}/>
           )
         }
       </table>

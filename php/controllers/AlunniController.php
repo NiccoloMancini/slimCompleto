@@ -30,7 +30,6 @@ class AlunniController{
     $nome = $body["nome"];
     $cognome = $body["cognome"];
     $result = Db::getInstance()->query("UPDATE alunni SET nome = '$nome', cognome = '$cognome' WHERE id = " . $args['id']);
-    $response->getBody()->write($result ? "aggiornamento effettuato" : "errore");
     return $response->withHeader("Content-type", "application/json")->withStatus(200);
   }
 
